@@ -1,5 +1,8 @@
 # strudel-claude
 
+> [!NOTE]
+> This repository is a customized fork of [renatoworks/strudel-claude](https://github.com/renatoworks/strudel-claude) (specifically focusing on the [Skills for Claude Code](https://github.com/renatoworks/strudel-claude/blob/main/README.md#skills-for-claude-code) live coding experience). It serves as my personal playground for algorithmic music composition.
+
 ![strudel-claude](public/strudel-claude.png)
 
 An experiment to play and learn [Strudel](https://strudel.cc) with Claude Code.
