@@ -92,7 +92,8 @@ export function StrudelEditor() {
   // Share track link directly from the editor
   const handleShareClick = useCallback(() => {
     const editor = getEditor()
-    const code = editor ? editor.getCode() : null
+    // Read the current code from editor.code property (getter)
+    const code = editor ? editor.code : null
     const currentCode = code || DEFAULT_CODE
 
     try {
@@ -130,10 +131,10 @@ export function StrudelEditor() {
         </div>
       )}
 
-      {/* Library Sidebar Toggle Button */}
+      {/* Library Sidebar Toggle Button (Repositioned to top-right to avoid blocking CodeMirror left gutters) */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className={`fixed top-6 left-6 z-50 flex items-center gap-2 px-4 h-10 rounded-lg backdrop-blur-md border border-border/50 text-sm font-medium transition-all shadow-lg cursor-pointer ${
+        className={`fixed top-6 right-6 z-50 flex items-center gap-2 px-4 h-10 rounded-lg backdrop-blur-md border border-border/50 text-sm font-medium transition-all shadow-lg cursor-pointer ${
           isSidebarOpen
             ? 'bg-primary/20 text-primary border-primary/50'
             : 'bg-card/85 text-muted-foreground hover:text-foreground hover:bg-card'
@@ -143,10 +144,10 @@ export function StrudelEditor() {
         <span>Library</span>
       </button>
 
-      {/* Sliding Sidebar */}
+      {/* Sliding Sidebar (Repositioned to the right side of the screen) */}
       <div
-        className={`fixed top-0 left-0 h-screen w-80 z-40 bg-card/65 backdrop-blur-xl border-r border-border/40 flex flex-col transition-transform duration-350 ease-out shadow-2xl ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 right-0 h-screen w-80 z-40 bg-card/65 backdrop-blur-xl border-l border-border/40 flex flex-col transition-transform duration-350 ease-out shadow-2xl ${
+          isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Sidebar Header */}
@@ -245,10 +246,10 @@ export function StrudelEditor() {
         </div>
       </div>
 
-      {/* Main Workspace (Editor + Controls) */}
+      {/* Main Workspace (Editor + Controls) (Adjusted transition to shift editor left when right-sidebar opens) */}
       <div 
         className={`flex-1 h-screen flex flex-col relative transition-all duration-300 ${
-          isSidebarOpen ? 'pl-80' : 'pl-0'
+          isSidebarOpen ? 'pr-80' : 'pr-0'
         }`}
       >
         {/* Editor */}
