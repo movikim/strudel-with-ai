@@ -3,7 +3,7 @@
 import { useStrudel } from '@/hooks/use-strudel'
 import { useAudioRecorder, formatDuration } from '@/hooks/use-audio-recorder'
 import { DEFAULT_CODE } from '@/lib/constants'
-import { Play, Square, RefreshCw, Circle, Download, Trash2, Music, Loader2, PlayCircle, Sparkles } from 'lucide-react'
+import { Play, Square, RefreshCw, Circle, Download, Trash2, Music, Loader2, PlayCircle, Sparkles, Share2 } from 'lucide-react'
 import { useState, useEffect, useCallback } from 'react'
 
 type Track = {
@@ -34,6 +34,7 @@ export function StrudelEditor() {
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showCopiedToast, setShowCopiedToast] = useState(false)
 
   // Fetch tracks from API
   useEffect(() => {
@@ -88,6 +89,27 @@ export function StrudelEditor() {
     }
   }, [getEditor, play])
 
+  // Share track link directly from the editor
+  const handleShareClick = useCallback(() => {
+    const editor = getEditor()
+    const code = editor ? editor.getCode() : null
+    const currentCode = code || DEFAULT_CODE
+
+    try {
+      // Encode unicode code safely to base64
+      const base64Code = btoa(encodeURIComponent(currentCode).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode(parseInt(p1, 16))
+      }))
+      const strudelUrl = `https://strudel.cc/?code=${encodeURIComponent(base64Code)}`
+      
+      navigator.clipboard.writeText(strudelUrl)
+      setShowCopiedToast(true)
+      setTimeout(() => setShowCopiedToast(false), 2000)
+    } catch (err) {
+      console.error('Failed to generate share link:', err)
+    }
+  }, [getEditor])
+
   // Group tracks by artist
   const groupedTracks = tracks.reduce<Record<string, Track[]>>((acc, track) => {
     acc[track.artist] = acc[track.artist] || []
@@ -101,6 +123,13 @@ export function StrudelEditor() {
 
   return (
     <div className="h-screen w-screen flex bg-background relative overflow-hidden">
+      {/* Toast Notification */}
+      {showCopiedToast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-full shadow-lg border border-primary/20 animate-in fade-in slide-in-from-top-2 duration-200">
+          Link copied to clipboard! 🔗
+        </div>
+      )}
+
       {/* Library Sidebar Toggle Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -286,6 +315,15 @@ export function StrudelEditor() {
             className="w-10 h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition-colors"
           >
             <RefreshCw className="size-4" />
+          </button>
+
+          {/* Web Share Button */}
+          <button
+            onClick={handleShareClick}
+            title="Copy share link to strudel.cc"
+            className="w-10 h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 flex items-center justify-center transition-colors"
+          >
+            <Share2 className="size-4" />
           </button>
         </div>
       </div>
