@@ -2,6 +2,7 @@
 
 import { useStrudel } from '@/hooks/use-strudel'
 import { useAudioRecorder, formatDuration } from '@/hooks/use-audio-recorder'
+import LZString from 'lz-string'
 import { DEFAULT_CODE } from '@/lib/constants'
 import { Play, Square, RefreshCw, Circle, Download, Trash2, Music, Loader2, PlayCircle, Sparkles, Share2 } from 'lucide-react'
 import { useState, useEffect, useCallback } from 'react'
@@ -97,11 +98,9 @@ export function StrudelEditor() {
     const currentCode = code || DEFAULT_CODE
 
     try {
-      // Encode unicode code safely to base64
-      const base64Code = btoa(encodeURIComponent(currentCode).replace(/%([0-9A-F]{2})/g, (match, p1) => {
-        return String.fromCharCode(parseInt(p1, 16))
-      }))
-      const strudelUrl = `https://strudel.cc/?code=${encodeURIComponent(base64Code)}`
+      // Compress code using LZString (matching official strudel.cc REPL URL sharing format)
+      const compressedCode = LZString.compressToEncodedURIComponent(currentCode)
+      const strudelUrl = `https://strudel.cc/?code=${compressedCode}`
       
       navigator.clipboard.writeText(strudelUrl)
       setShowCopiedToast(true)

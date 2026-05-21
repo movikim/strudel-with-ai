@@ -29,11 +29,13 @@ try {
 
   const jsCode = match[1].trim();
   
-  // Base64 encode the code
-  const base64Code = Buffer.from(jsCode).toString('base64');
+  const LZString = require('lz-string');
+  
+  // Compress the code using LZString (matching official strudel.cc REPL URL sharing format)
+  const compressedCode = LZString.compressToEncodedURIComponent(jsCode);
   
   // Generate the official Strudel REPL URL
-  const strudelUrl = `https://strudel.cc/?code=${encodeURIComponent(base64Code)}`;
+  const strudelUrl = `https://strudel.cc/?code=${compressedCode}`;
 
   console.log('\n==================================================');
   console.log(`🎵 Track: ${path.basename(trackRelativePath, '.md').toUpperCase()}`);
