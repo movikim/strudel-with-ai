@@ -139,3 +139,13 @@ The vibe should match the moment.
 ## Philosophy
 
 Music is expression. Code is just the medium. Help people find their sound.
+
+---
+
+## Custom Project Workflows & Runbooks
+
+For custom workflows and development guidelines unique to this workspace, refer to:
+- **Music Composition & Archiving Workflow**: Detailed guidelines on interactive planning, composition style, metadata schemas, and saving tracks in `/tracks` can be found in [music-composition-flow.md](file:///Users/movi/GitRepo/strudel-claude/docs/skills/music-composition-flow.md).
+- **Sidebar & UI Developer Guide**: Architecture details, styling conventions (glassmorphism/cyberpunk), synced playback mechanism, and `lz-string` URL sharing configurations can be found in [sidebar-maintenance.md](file:///Users/movi/GitRepo/strudel-claude/docs/skills/sidebar-maintenance.md).
+
+Always read these documents before starting a new track composition or editing the workspace user interface.
